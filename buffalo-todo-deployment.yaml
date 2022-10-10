@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: buffalo-todo
+  labels:
+    app: buffalo-todo
+spec:
+  ports:
+    - port: 3000
+  selector:
+    app: buffalo-todo
+    tier: frontend
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: todo-pv-claim
+  labels:
+    app: buffalo-todo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buffalo-todo
+  labels:
+    app: buffalo-todo
+spec:
+  selector:
+    matchLabels:
+      app: buffalo-todo
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: buffalo-todo
+        tier: frontend
+    spec:
+      containers:
+      - image: anumidium/buffalo-todo:v1.0
+        name: buffalo-todo
+        ports:
+        - containerPort: 3000
+          name: buffalo-todo
+        volumeMounts:
+        - name: buffalo-todo-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: buffalo-todo-persistent-storage
+        persistentVolumeClaim:
+          claimName: todo-pv-claim
