@@ -1,12 +1,12 @@
 ---
 development:
   dialect: "sqlite3"
-  database: /Users/clark/go/src/tada_tada_development.sqlite
+  database: tada_tada_development.sqlite
 
 test:
   dialect: "sqlite3"
-  database: /Users/clark/go/src/tada_tada_test.sqlite
+  database: tada_tada_test.sqlite
 
 production:
   dialect: "sqlite3"
-  database: /Users/clark/go/src/tada_tada_production.sqlite
+  database: tada_tada_production.sqlite
